@@ -40,7 +40,8 @@ async def create_game():
     games[game_id] = {
         "players": [],
         "state": "waiting",
-        "cards": []
+        "cards": [],
+        "selected_cards": {}
     }
 
     return {
@@ -69,6 +70,7 @@ async def websocket_endpoint(game_id: str, websocket: WebSocket):
                         await websocket.send_json({
                             "error": "Not enough players to start the game!"
                         })
+                        continue
 
                 # Broadcast updated game state to all players
                 for connection in game_connections[game_id]:
