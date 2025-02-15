@@ -109,6 +109,12 @@ async def websocket_endpoint(game_id: str, websocket: WebSocket):
                     active_card["player_name"] = player_name
                     games[game_id]["selected_card"][player_name] = active_card["card_value"]
 
+                    # Send **only the player** their assigned role
+                    await websocket.send_json({
+                        "message": "You have selected your card!",
+                        "your_role": games[game_id]["cards"][card_id]["card_value"]
+                    })
+
                     # Check if all players have selected cards
                     if len(games[game_id]["selected_cards"]) == len(games[game_id]["players"]):
                         # Move to game phase
