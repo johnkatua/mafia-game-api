@@ -48,5 +48,9 @@ async def websocket_endpoint(game_id: str, websocket: WebSocket):
     try:
         while True:
             data = await websocket.receive_json()
+            if "action" in data:
+                if data["action"] == "join":
+                    player_name = data["player"]
+                    games[game_id]["players"].append(player_name)
     except WebSocketDisconnect:
         game_connections[game_id].remove(websocket)
