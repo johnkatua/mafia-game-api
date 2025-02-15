@@ -136,8 +136,21 @@ async def websocket_endpoint(game_id: str, websocket: WebSocket):
                                 if mafia_ws:
                                     await mafia_ws.send_json(mafia_message)
 
+                # Send updated state (excluding roles) to all players
+                game_state = {
+                    "state": games[game_id]["state"],
+                    "players": list(games[game_id]["players"].keys()),
+                    "cards": [
+                        {
+                            "card_id": card["card_id"],
+                            "selected": card["selected"],
+                            "player_name": card["player_name"]
+                        }
+                        for card in games[game_id]["cards"]
+                    ]
+                }
                 # Broadcast updated game state to all players
-                for connection in game_connections[game_id]:
-                    await connection.send_json(games[game_id])
+                for ws in game_connections[game_id].values():
+                    await ws.send_json(game_state)
     except WebSocketDisconnect:
         game_connections[game_id].remove(websocket)
