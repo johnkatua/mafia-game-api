@@ -8,7 +8,7 @@ This FastAPI server manages real-time multiplayer Mafia game. It allows users to
 
 Websocket handles real-time communication, ensuring all players receive updates on game events.
 """
-import uuid
+import random
 from typing import Dict, List
 from collections import defaultdict
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
@@ -36,7 +36,8 @@ game_connections: Dict[str, List[WebSocket]] = defaultdict(list)
 @app.post("/create_game")
 async def create_game():
     """Creates a new game session and returns a unique Game ID."""
-    game_id = str(uuid.uuid4())[:6]  # Generate a short unique game ID
+    game_id = str(random.randint(000000, 999999)
+                  )  # Generate a 6-digit unique game ID
     games[game_id] = {
         "players": [],
         "state": "waiting",
@@ -71,6 +72,13 @@ async def websocket_endpoint(game_id: str, websocket: WebSocket):
                             "error": "Not enough players to start the game!"
                         })
                         continue
+
+                    # Create shuffled roles
+                    # 25% should be mafia
+                    num_mafia = max(1, len(players) // 4)
+                    roles = ["mafia"] * num_mafia + \
+                        ["civilian"] * (len(players) - num_mafia)
+                    random
 
                 # Broadcast updated game state to all players
                 for connection in game_connections[game_id]:
