@@ -63,6 +63,13 @@ async def websocket_endpoint(game_id: str, websocket: WebSocket):
                     player_name = data["player"]
                     games[game_id]["players"].append(player_name)
 
+                elif data["action"] == "start_game":
+                    players = games[game_id]["players"]
+                    if len(players) < 4:  # Ensure minimum players before starting
+                        await websocket.send_json({
+                            "error": "Not enough players to start the game!"
+                        })
+
                 # Broadcast updated game state to all players
                 for connection in game_connections[game_id]:
                     await connection.send_json(games[game_id])
