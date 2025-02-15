@@ -78,7 +78,18 @@ async def websocket_endpoint(game_id: str, websocket: WebSocket):
                     num_mafia = max(1, len(players) // 4)
                     roles = ["mafia"] * num_mafia + \
                         ["civilian"] * (len(players) - num_mafia)
-                    random
+                    random.shuffle(roles)
+
+                    # Create face-down cards (no player assigned yet)
+                    games[game_id]["cards"] = [
+                        {
+                            "card_id": index,
+                            "selected": False,
+                            "player_name": None,
+                            "card_value": roles[index]
+                        }
+                        for index in range(len(players))
+                    ]
 
                 # Broadcast updated game state to all players
                 for connection in game_connections[game_id]:
