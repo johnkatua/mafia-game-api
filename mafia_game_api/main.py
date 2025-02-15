@@ -97,11 +97,17 @@ async def websocket_endpoint(game_id: str, websocket: WebSocket):
                 elif data["action"] == "select_game":
                     player_name = data["player"]
                     card_id = data["card_id"]
+                    active_card = games[game_id]["cards"][card_id]
 
                     # Ensure the card is not already picked
-                    if games[game_id]["cards"][card_id]["selected"]:
+                    if active_card["selected"]:
                         await websocket.send_json({"error": "Card already selected!"})
                         continue
+
+                    # Assign the card to the player
+                    active_card["selected"] = True
+                    active_card["player_name"] = player_name
+                    games[game_id]["selected_card"][player_name] = active_card["card_value"]
 
                 # Broadcast updated game state to all players
                 for connection in game_connections[game_id]:
