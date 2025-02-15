@@ -15,6 +15,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+base_url = "http://localhost:3000"
+
 # Store active games
 games: Dict[str, Dict] = {}
 
@@ -29,4 +31,9 @@ async def create_game():
     games[game_id] = {
         "players": [],
         "state": "waiting"
+    }
+
+    return {
+        "game_id": game_id,
+        "join": f"{base_url}/join/{game_id}"
     }
