@@ -52,5 +52,9 @@ async def websocket_endpoint(game_id: str, websocket: WebSocket):
                 if data["action"] == "join":
                     player_name = data["player"]
                     games[game_id]["players"].append(player_name)
+
+                # Broadcast updated game state to all players
+                for connection in game_connections[game_id]:
+                    await connection.send_json(games[game_id])
     except WebSocketDisconnect:
         game_connections[game_id].remove(websocket)
