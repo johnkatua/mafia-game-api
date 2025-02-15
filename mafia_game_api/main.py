@@ -1,4 +1,13 @@
-"""Entry point"""
+"""
+Websocket-based Mafia Game Server
+
+This FastAPI server manages real-time multiplayer Mafia game. It allows users to:
+    - Create a new game session with a unique Game ID.
+    - Join an existing game via Websocket
+    - Maintain game state and broadcast updates to all connected players
+
+Websocket handles real-time communication, ensuring all players receive updates on game events.
+"""
 import uuid
 from typing import Dict, List
 from collections import defaultdict
