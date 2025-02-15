@@ -94,7 +94,7 @@ async def websocket_endpoint(game_id: str, websocket: WebSocket):
                     # Set game state to selecting phase
                     games[game_id]["state"] = "selecting"
 
-                elif data["action"] == "select_game":
+                elif data["action"] == "select_card":
                     player_name = data["player"]
                     card_id = data["card_id"]
                     active_card = games[game_id]["cards"][card_id]
@@ -108,6 +108,11 @@ async def websocket_endpoint(game_id: str, websocket: WebSocket):
                     active_card["selected"] = True
                     active_card["player_name"] = player_name
                     games[game_id]["selected_card"][player_name] = active_card["card_value"]
+
+                    # Check if all players have selected cards
+                    if len(games[game_id]["selected_cards"]) == len(games[game_id]["players"]):
+                        # Move to game phase
+                        games[game_id]["state"] = "playing"
 
                 # Broadcast updated game state to all players
                 for connection in game_connections[game_id]:
