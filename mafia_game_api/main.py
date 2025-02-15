@@ -126,6 +126,12 @@ async def websocket_endpoint(game_id: str, websocket: WebSocket):
                             if role == "mafia"
                         ]
 
+                        if len(mafia_players) > 1:
+                            mafia_message = {
+                                "message": "You are Mafia. Your teammates are:",
+                                "mafia_team": mafia_players
+                            }
+
                 # Broadcast updated game state to all players
                 for connection in game_connections[game_id]:
                     await connection.send_json(games[game_id])
