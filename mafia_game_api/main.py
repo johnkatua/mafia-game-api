@@ -91,6 +91,9 @@ async def websocket_endpoint(game_id: str, websocket: WebSocket):
                         for index in range(len(players))
                     ]
 
+                    # Set game state to selecting phase
+                    games[game_id]["state"] = "selecting"
+
                 # Broadcast updated game state to all players
                 for connection in game_connections[game_id]:
                     await connection.send_json(games[game_id])
