@@ -37,3 +37,10 @@ async def create_game():
         "game_id": game_id,
         "join": f"{base_url}/join/{game_id}"
     }
+
+
+@app.websocket("/ws/{game_id}")
+async def websocket_endpoint(game_id: str, websocket: WebSocket):
+    """Handles real-time communication for a specific game."""
+    await websocket.accept()
+    game_connections[game_id].append(websocket)
