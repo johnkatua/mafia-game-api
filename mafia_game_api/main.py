@@ -39,7 +39,8 @@ async def create_game():
     game_id = str(uuid.uuid4())[:6]  # Generate a short unique game ID
     games[game_id] = {
         "players": [],
-        "state": "waiting"
+        "state": "waiting",
+        "cards": []
     }
 
     return {
