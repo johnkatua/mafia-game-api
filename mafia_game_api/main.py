@@ -1,3 +1,5 @@
+"""Entry point"""
+import uuid
 from typing import Dict, List
 from collections import defaultdict
 from fastapi import FastAPI, WebSocket
@@ -23,3 +25,8 @@ game_connections: Dict[str, List[WebSocket]] = defaultdict(list)
 @app.post("/create_game")
 async def create_game():
     """Creates a new game session and returns a unique Game ID."""
+    game_id = str(uuid.uuid4())[:6]  # Generate a short unique game ID
+    games[game_id] = {
+        "players": [],
+        "state": "waiting"
+    }
