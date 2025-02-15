@@ -2,7 +2,7 @@
 import uuid
 from typing import Dict, List
 from collections import defaultdict
-from fastapi import FastAPI, WebSocket
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -15,7 +15,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-base_url = "http://localhost:3000"
+BASE_URL: str = "http://localhost:3000"
 
 # Store active games
 games: Dict[str, Dict] = {}
@@ -35,7 +35,7 @@ async def create_game():
 
     return {
         "game_id": game_id,
-        "join": f"{base_url}/join/{game_id}"
+        "join": f"{BASE_URL}/join/{game_id}"
     }
 
 
@@ -44,3 +44,9 @@ async def websocket_endpoint(game_id: str, websocket: WebSocket):
     """Handles real-time communication for a specific game."""
     await websocket.accept()
     game_connections[game_id].append(websocket)
+
+    try:
+        while True:
+            data = await websocket.receive_json()
+    except WebSocketDisconnect:
+        game_connections[game_id].remove(websocket)
