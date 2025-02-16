@@ -8,6 +8,7 @@ This FastAPI server manages real-time multiplayer Mafia game. It allows users to
 
 Websocket handles real-time communication, ensuring all players receive updates on game events.
 """
+import asyncio
 import random
 from typing import Dict, List
 from collections import defaultdict
@@ -160,3 +161,15 @@ async def websocket_endpoint(game_id: str, websocket: WebSocket):
                     await ws.send_json(game_state)
     except WebSocketDisconnect:
         game_connections[game_id].remove(websocket)
+
+
+async def start_discussion_phase(game_id: str):
+    """Starts a discussion phase where each player has 2 mins"""
+    total_time = len(games[game_id]["players"]) * 2
+
+    for ws in game_connections[game_id].values():
+        await ws.send_json({
+            "message": f"Discussion time started! Total time: {total_time} minutes."
+        })
+
+    await asyncio.sleep(total_time * 60)  # Wait for the discussion time to end
