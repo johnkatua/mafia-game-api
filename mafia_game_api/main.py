@@ -62,6 +62,15 @@ async def restart_game(game_id: str):
             "error": "Game not found"
         }
 
+    # Reset all game states except players
+    games[game_id].update({
+        "state": "waiting",
+        "cards": [],
+        "selected_cards": {},
+        "eliminated": set(),
+        "votes": {}
+    })
+
 
 @app.websocket("/ws/{game_id}")
 async def websocket_endpoint(game_id: str, websocket: WebSocket):
