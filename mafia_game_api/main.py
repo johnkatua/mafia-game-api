@@ -1,7 +1,8 @@
 """
 Websocket-based Mafia Game Server
 
-This FastAPI server manages real-time multiplayer Mafia game. It provides the following functionalities:
+This FastAPI server manages real-time multiplayer Mafia game. 
+It provides the following functionalities:
 
     - **Game Management**:
         - Create a new game session with a unique Game ID.
