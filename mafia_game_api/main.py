@@ -151,6 +151,11 @@ async def websocket_endpoint(game_id: str, websocket: WebSocket):
                         })
                         continue
 
+                    games[game_id]["votes"][player_name] = voted_player
+
+                    if len(games[game_id]["votes"]) == len(games[game_id]["players"]) - len(games[game_id]["eliminated"]):
+                        await handle_voting_results(game_id)
+
                 # Send updated state (excluding roles) to all players
                 game_state = {
                     "state": games[game_id]["state"],
