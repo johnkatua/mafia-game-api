@@ -210,3 +210,17 @@ async def handle_voting_results(game_id: str):
         1 for p in games[game_id]["selected_cards"] if p not in games[game_id]["eliminated"] and
         games[game_id]["selected_cards"][p] == "civilian"
     )
+
+    if mafia_remaining >= civilian_remaining:
+        winner = "Mafia"
+    elif mafia_remaining == 0:
+        winner = "Civilians"
+    else:
+        winner = None
+
+    if winner:
+        for ws in game_connections[game_id].values():
+            await ws.send_json({
+                "message": f"Game Over! {winner} win!"
+            })
+        games.pop(game_id)  # Remove game data
