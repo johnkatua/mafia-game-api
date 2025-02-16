@@ -1,13 +1,30 @@
 """
 Websocket-based Mafia Game Server
 
-This FastAPI server manages real-time multiplayer Mafia game. It allows users to:
-    - Create a new game session with a unique Game ID.
-    - Join an existing game via Websocket
-    - Discuss on who to vote out of the game
-    - Vote, eliminate and check for the winners
-    - Maintain game state and broadcast updates to all connected players
-    - Host can restart the game 
+This FastAPI server manages real-time multiplayer Mafia game. It provides the following functionalities:
+
+    - **Game Management**:
+        - Create a new game session with a unique Game ID.
+        - Restart an existing game while retaining the players.
+        - Maintain and update the game state
+
+    - **Player Interaction**:
+        - Join an existing game via Websocket.
+        - Select a role card when the game begins.
+        - Engage in discussions to strategize and vote on eliminations
+    
+    - **Game Phases**:
+        - **Selecting**: Players are assigned random roles (Mafia and Civilian).
+        - **Discussion**: Players debate and analyze before voting (each player gets 2 minutes).
+        - **Voting**: Players cast votes to eliminate a suspected Mafia or Civilian.
+        - **Elimination**: The most-voted player is removed from the game.
+        - **Win Conditions**: 
+            The game checks if the Mafia or Civilian have won after each elimination
+
+    - **Real-Time Communication**:
+        - Broadcasts game updates to all connected players
+        - Ensure Mafia members are notified of their teammates.
+        - Notifies players about game events, including eliminations and game results
 
 Websocket handles real-time communication, ensuring all players receive updates on game events.
 """
