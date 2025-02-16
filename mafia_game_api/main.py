@@ -186,6 +186,7 @@ async def websocket_endpoint(game_id: str, websocket: WebSocket):
 
                 # Send updated state (excluding roles) to all players
                 game_state = {
+                    "host": games[game_id]["host"],
                     "state": games[game_id]["state"],
                     "players": list(games[game_id]["players"].keys()),
                     "cards": [
