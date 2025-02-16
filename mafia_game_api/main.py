@@ -184,3 +184,12 @@ async def start_discussion_phase(game_id: str):
 async def handle_voting_results(game_id: str):
     """Handles voting, eliminates the most-voted player, and checks for winners."""
     vote_count = defaultdict(int)
+
+    # Count votes
+    for player in games[game_id]["votes"].values():
+        vote_count[player] += 1
+
+    # Find player with max votes
+    eliminated_player = max(vote_count, key=vote_count.get)
+    games[game_id]["eliminated"].add(eliminated_player)
+    role = games[game_id]["selected_cards"][eliminated_player]
