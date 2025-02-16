@@ -173,3 +173,9 @@ async def start_discussion_phase(game_id: str):
         })
 
     await asyncio.sleep(total_time * 60)  # Wait for the discussion time to end
+
+    games[game_id]["state"] = "voting"
+    for ws in game_connections[game_id].values():
+        await ws.send_json({
+            "message": "Discussion over! Time to vote."
+        })
