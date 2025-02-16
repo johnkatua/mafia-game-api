@@ -54,6 +54,15 @@ async def create_game():
     }
 
 
+@app.post("/restart/{game_id}")
+async def restart_game(game_id: str):
+    """Resets the game state while keeping the same players and game ID."""
+    if game_id not in games:
+        return {
+            "error": "Game not found"
+        }
+
+
 @app.websocket("/ws/{game_id}")
 async def websocket_endpoint(game_id: str, websocket: WebSocket):
     """Handles real-time communication for a specific game."""
