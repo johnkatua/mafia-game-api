@@ -55,6 +55,14 @@ games: Dict[str, Dict] = {}
 game_connections: Dict[str, List[WebSocket]] = defaultdict(list)
 
 
+@app.get("/healthcheck")
+async def root():
+    """Check if the API is up and runnig"""
+    return {
+        "message": "API up and running"
+    }
+
+
 @app.post("/create_game")
 async def create_game(player_name: str):
     """Creates a new game session and returns a unique Game ID."""
