@@ -200,3 +200,13 @@ async def handle_voting_results(game_id: str):
             "message": f"{eliminated_player} has been eliminated!",
             "eliminated_role": role
         })
+
+    # Check win conditions
+    mafia_remaining = sum(
+        1 for p in games[game_id]["selected_cards"] if p not in games[game_id]["eliminated"] and
+        games[game_id]["selected_cards"][p] == "mafia"
+    )
+    civilian_remaining = sum(
+        1 for p in games[game_id]["selected_cards"] if p not in games[game_id]["eliminated"] and
+        games[game_id]["selected_cards"][p] == "civilian"
+    )
