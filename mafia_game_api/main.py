@@ -143,6 +143,14 @@ async def websocket_endpoint(game_id: str, websocket: WebSocket):
                         games[game_id]["state"] = "discussion"
                         await start_discussion_phase(game_id)
 
+                elif data["action"] == "vote":
+                    voted_player = data["voted_player"]
+                    if voted_player not in games[game_id]["players"] or voted_player in games[game_id]["eliminated"]:
+                        await websocket.send_json({
+                            "error": "Invalid vote!"
+                        })
+                        continue
+
                 # Send updated state (excluding roles) to all players
                 game_state = {
                     "state": games[game_id]["state"],
