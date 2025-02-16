@@ -193,3 +193,10 @@ async def handle_voting_results(game_id: str):
     eliminated_player = max(vote_count, key=vote_count.get)
     games[game_id]["eliminated"].add(eliminated_player)
     role = games[game_id]["selected_cards"][eliminated_player]
+
+    # Notify all players of elimination result
+    for ws in game_connections[game_id].values():
+        await ws.send_json({
+            "message": f"{eliminated_player} has been eliminated!",
+            "eliminated_role": role
+        })
