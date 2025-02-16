@@ -138,6 +138,10 @@ async def websocket_endpoint(game_id: str, websocket: WebSocket):
                                 if mafia_ws:
                                     await mafia_ws.send_json(mafia_message)
 
+                        # Move to game phase
+                        games[game_id]["state"] = "discussion"
+                        await start_discussion_phase(game_id)
+
                 # Send updated state (excluding roles) to all players
                 game_state = {
                     "state": games[game_id]["state"],
