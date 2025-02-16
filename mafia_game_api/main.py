@@ -42,7 +42,9 @@ async def create_game():
         "players": [],
         "state": "waiting",
         "cards": [],
-        "selected_cards": {}
+        "selected_cards": {},
+        "eliminated": set(),
+        "votes": {}
     }
 
     return {
