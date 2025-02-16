@@ -35,11 +35,12 @@ game_connections: Dict[str, List[WebSocket]] = defaultdict(list)
 
 
 @app.post("/create_game")
-async def create_game():
+async def create_game(player_name: str):
     """Creates a new game session and returns a unique Game ID."""
     game_id = str(random.randint(000000, 999999)
                   )  # Generate a 6-digit unique game ID
     games[game_id] = {
+        "host": player_name,
         "players": [],
         "state": "waiting",
         "cards": [],
@@ -50,7 +51,8 @@ async def create_game():
 
     return {
         "game_id": game_id,
-        "join": f"{BASE_URL}/join/{game_id}"
+        "join": f"{BASE_URL}/join/{game_id}",
+        "host": player_name
     }
 
 
@@ -70,6 +72,14 @@ async def restart_game(game_id: str):
         "eliminated": set(),
         "votes": {}
     })
+
+    # Notify players about the game restart
+    for ws in game_connections[game_id].values():
+        await ws.send_json({
+            "message": "Game has been restarted! Select new cards when the game starts."
+        })
+
+    return {"message": "Game restarted successfully"}
 
 
 @app.websocket("/ws/{game_id}")
