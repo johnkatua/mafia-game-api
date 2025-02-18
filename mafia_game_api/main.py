@@ -35,6 +35,7 @@ from typing import Dict, List
 from collections import defaultdict
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 
 app = FastAPI()
 
@@ -63,8 +64,13 @@ async def root():
     }
 
 
+class Player(BaseModel):
+    """A data model for the player"""
+    player_name: str
+
+
 @app.post("/create_game")
-async def create_game(player_name: str):
+async def create_game(player_name: Player):
     """Creates a new game session and returns a unique Game ID."""
     game_id = str(random.randint(000000, 999999)
                   )  # Generate a 6-digit unique game ID
