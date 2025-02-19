@@ -86,7 +86,7 @@ async def create_game(player: Player):
 
     return {
         "game_id": game_id,
-        "join": f"{BASE_URL}/join/{game_id}",
+        "join": f"{BASE_URL}/{game_id}",
         "host": player.player_name
     }
 
